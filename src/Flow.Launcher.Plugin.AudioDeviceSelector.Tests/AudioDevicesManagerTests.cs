@@ -1,5 +1,6 @@
 ﻿using Flow.Launcher.Plugin.AudioDeviceSelector.Audio;
 using System;
+using Flow.Launcher.Plugin.AudioDeviceSelector.Components;
 using Xunit;
 
 namespace Flow.Launcher.Plugin.AudioDeviceSelector.Tests
@@ -17,7 +18,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Tests
         [InlineData("Speakers(SRS-XB13 Stereo)", TitleTypeSettings.DeviceDescription, "SRS-XB13 Stereo")]
         public void Test_GetDeviceTitle(string friendlyName, TitleTypeSettings titleType, string expectedResult)
         {
-            var obj = new AudioDevicesManager();
+            var obj = new AudioDevicesManager(new Settings());
 
             var result = obj.GetDeviceTitle(friendlyName, titleType);
 
