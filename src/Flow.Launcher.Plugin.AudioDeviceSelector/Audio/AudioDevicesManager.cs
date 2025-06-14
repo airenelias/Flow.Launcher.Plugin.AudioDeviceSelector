@@ -18,7 +18,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
         private DateTime lastDeviceUpdateTimeStamp = DateTime.Now;
         private int updateIntervalSeconds = 5;
         private MMDeviceEnumerator deviceEnumerator = new MMDeviceEnumerator();
-        private readonly Dictionary<string, string> idToNameMap = new();
+        private readonly Dictionary<string, DeviceInfo> deviceCacheMap = new();
 
         public List<MMDevice> Devices 
         { 
@@ -45,19 +45,18 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
                 deviceEnumerator.RegisterEndpointNotificationCallback(this);
             else {
                 deviceEnumerator.UnregisterEndpointNotificationCallback(this);
-                idToNameMap.Clear();
+                deviceCacheMap.Clear();
             }
         }
 
-        public string GetDeviceNameFromCache(MMDevice device) {
+        public DeviceInfo GetDeviceInfoFromCache(MMDevice device) {
             var id = device.ID;
-            if (idToNameMap.ContainsKey(id)) {
-                return idToNameMap[id];
+            if (deviceCacheMap.ContainsKey(id)) {
+                return deviceCacheMap[id];
             }
 
-            var name = device.FriendlyName;
-            idToNameMap[id] = name;
-            return name;
+            deviceCacheMap[id] = new DeviceInfo(device.FriendlyName);
+            return deviceCacheMap[id];
         }
         
         public List<MMDevice> GetDevices()
@@ -70,7 +69,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
             {
                 if (Settings.CacheDeviceNames) {
                     // Puts the name in cache if it's not there yet
-                    GetDeviceNameFromCache(endpoint);
+                    GetDeviceInfoFromCache(endpoint);
                 }
 
                 devices.Add(endpoint);
@@ -144,7 +143,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
         public void OnDeviceAdded(string pwstrDeviceId) { }
 
         public void OnDeviceRemoved(string deviceId) {
-            idToNameMap.Remove(deviceId);
+            deviceCacheMap.Remove(deviceId);
         }
 
         public void OnDefaultDeviceChanged(DataFlow flow, Role role, string defaultDeviceId) { }
@@ -155,7 +154,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
                 key.propertyId != PropertyKeys.PKEY_DeviceInterface_FriendlyName.propertyId)
                 return;
             var device = deviceEnumerator.GetDevice(pwstrDeviceId);
-            idToNameMap[device.ID] = device.FriendlyName;
+            deviceCacheMap[device.ID].Set(device.FriendlyName);
         }
 
         public void Dispose() {

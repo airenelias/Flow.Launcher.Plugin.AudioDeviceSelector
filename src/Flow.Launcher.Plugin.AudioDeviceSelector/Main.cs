@@ -16,6 +16,9 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
 
         private const string imagePath = "Images/speaker.png";
 
+        private const string FontFamily = "Segoe Fluent Icons";
+        private const string ErrorGlyph = "\ue783";
+
         private SettingsUserControl SettingWindow;
         private Settings settings;
 
@@ -66,7 +69,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return SingleResult(
+                return ErrorResult(
                     "There was an error while processing the request",
                     e.GetBaseException().Message
                 );
@@ -84,19 +87,19 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
             {
                 string title = string.Empty;
                 string subTitle = string.Empty;
-                var friendlyName = settings.CacheDeviceNames ? audioDevicesManager.GetDeviceNameFromCache(device) : device.FriendlyName;
+                var deviceInfo = settings.CacheDeviceNames ? audioDevicesManager.GetDeviceInfoFromCache(device) : new DeviceInfo(device.FriendlyName);
                 switch (titleType)
                 {
                     case TitleTypeSettings.FriendlyName:
-                        title = audioDevicesManager.GetDeviceTitle(friendlyName, TitleTypeSettings.FriendlyName);
+                        title = audioDevicesManager.GetDeviceTitle(deviceInfo.name, TitleTypeSettings.FriendlyName);
                         break;
                     case TitleTypeSettings.DeviceName:
-                        title = audioDevicesManager.GetDeviceTitle(friendlyName, TitleTypeSettings.DeviceName);
-                        subTitle = audioDevicesManager.GetDeviceTitle(friendlyName, TitleTypeSettings.DeviceDescription);
+                        title = audioDevicesManager.GetDeviceTitle(deviceInfo.name, TitleTypeSettings.DeviceName);
+                        subTitle = audioDevicesManager.GetDeviceTitle(deviceInfo.name, TitleTypeSettings.DeviceDescription);
                         break;
                     case TitleTypeSettings.DeviceDescription:
-                        title = audioDevicesManager.GetDeviceTitle(friendlyName, TitleTypeSettings.DeviceDescription);
-                        subTitle = audioDevicesManager.GetDeviceTitle(friendlyName, TitleTypeSettings.DeviceName);
+                        title = audioDevicesManager.GetDeviceTitle(deviceInfo.name, TitleTypeSettings.DeviceDescription);
+                        subTitle = audioDevicesManager.GetDeviceTitle(deviceInfo.name, TitleTypeSettings.DeviceName);
                         break;
                 }
 
@@ -113,7 +116,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
                     {
                         try
                         {
-                            if (!audioDevicesManager.SetDevice(friendlyName))
+                            if (!audioDevicesManager.SetDevice(deviceInfo.name))
                             {
                                 // Show Notification Message if device is not found
                                 // Can happen in situations where since FlowLauncher was shown, the device went offline
@@ -127,7 +130,8 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
 
                         return true;
                     },
-                    IcoPath = imagePath
+                    IcoPath = imagePath,
+                    Glyph = new GlyphInfo(FontFamily, deviceInfo.glyph)
                 };
 
                 results.Add(result);
@@ -137,7 +141,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
         }
 
         // Returns a list with a single result
-        private static List<Result> SingleResult(string title, string subtitle = "", Action action = default, bool hideAfterAction = true) =>
+        private static List<Result> ErrorResult(string title, string subtitle = "", Action action = default, bool hideAfterAction = true) =>
             new()
             {
                 new Result
@@ -145,6 +149,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
                     Title = title,
                     SubTitle = subtitle,
                     IcoPath = imagePath,
+                    Glyph = new GlyphInfo(FontFamily, ErrorGlyph),
                     Action = _ =>
                     {
                         action?.Invoke();
