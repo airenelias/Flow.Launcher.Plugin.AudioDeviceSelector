@@ -13,7 +13,7 @@
                 <Label Content="Display Mode" Margin="0,0,0,0" Name="DeviceNameDisplayModeLabel"></Label>
                 <RadioButton Margin="40, 5, 0, 0" Content="Option 1" Name="FriendlyNameOption" IsChecked="{Binding DisplayFriendlyName}"/>
                 <StackPanel Margin="90, 0, 0, 5" Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/Flow.Launcher.Plugin.AudioDeviceSelector;component/Images/speaker_resource.png" Height="32"></Image>
+                    <TextBlock x:Name="displayFriendlyNameGlyphTextBlock" TextWrapping="Wrap" Text="&#xe767;" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32" FontFamily="Segoe Fluent Icons"/>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="15, 0, 0, 5" Name="displayFriendlyNameTitleTextBlock" FontSize="18">
                         </TextBlock>
@@ -23,7 +23,7 @@
                 </StackPanel>
                 <RadioButton Margin="40, 5, 0, 0" Content="Option 2" Name="DeviceNameOption" IsChecked="{Binding DisplayDeviceName}"/>
                 <StackPanel Margin="90, 0, 0, 5" Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/Flow.Launcher.Plugin.AudioDeviceSelector;component/Images/speaker_resource.png" Height="32"></Image>
+                    <TextBlock x:Name="displayDeviceNameGlyphTextBlock" TextWrapping="Wrap" Text="&#xe767;" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32" FontFamily="Segoe Fluent Icons"/>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="15, 0, 0, 5" Name="displayDeviceNameTitleTextBlock" FontSize="18">
                         </TextBlock>
@@ -33,7 +33,7 @@
                 </StackPanel>
                 <RadioButton Margin="40, 5, 0, 0" Content="Option 3" Name="DeviceDescriptionOption" IsChecked="{Binding DisplayDeviceDescription}"/>
                 <StackPanel Margin="90, 0, 0, 5" Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/Flow.Launcher.Plugin.AudioDeviceSelector;component/Images/speaker_resource.png" Height="32"></Image>
+                    <TextBlock x:Name="displayDeviceDescriptionGlyphTextBlock" TextWrapping="Wrap" Text="&#xe767;" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32" FontFamily="Segoe Fluent Icons"/>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="15, 0, 0, 5" Name="displayDeviceDescriptionTitleTextBlock" FontSize="18">
                         </TextBlock>

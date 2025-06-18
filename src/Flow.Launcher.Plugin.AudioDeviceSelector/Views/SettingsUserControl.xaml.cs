@@ -44,19 +44,25 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Views
             var deviceFriendlyName = "Headphones (WH-XB910N Stereo)";
             var deviceDeviceName = string.Empty;
             var deviceDeviceDescription = string.Empty;
+            var deviceTypeGlyph = '\ue7f6'; // Headphone glyph
+
             if (devices.Count > 0)
             {
                 deviceFriendlyName = devices[0].FriendlyName;
+                deviceTypeGlyph = AudioDevicesManager.GetDeviceTypeGlyph(deviceFriendlyName);
             }
             deviceDeviceName = audioDevicesManager.GetDeviceTitle(deviceFriendlyName, TitleTypeSettings.DeviceName);
             deviceDeviceDescription = audioDevicesManager.GetDeviceTitle(deviceFriendlyName, TitleTypeSettings.DeviceDescription);
 
+            displayFriendlyNameGlyphTextBlock.Text = $"{deviceTypeGlyph}";
             displayFriendlyNameTitleTextBlock.Text = $"{deviceFriendlyName}";
             displayFriendlyNameSubtitleTextBlock.Text = $"{pluginName}";
 
+            displayDeviceNameGlyphTextBlock.Text = $"{deviceTypeGlyph}";
             displayDeviceNameTitleTextBlock.Text = $"{deviceDeviceName}";
             displayDeviceNameSubtitleTextBlock.Text = $"{deviceDeviceDescription}";
 
+            displayDeviceDescriptionGlyphTextBlock.Text = $"{deviceTypeGlyph}";
             displayDeviceDescriptionTitleTextBlock.Text = $"{deviceDeviceDescription}";
             displayDeviceDescriptionSubtitleTextBlock.Text = $"{deviceDeviceName}";
 

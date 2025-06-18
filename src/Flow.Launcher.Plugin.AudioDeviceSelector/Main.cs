@@ -14,9 +14,7 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
     {
         private PluginInitContext Context;
 
-        private const string imagePath = "Images/speaker.png";
-
-        private const string FontFamily = "Segoe Fluent Icons";
+        private const string FontFamily = "/Resources/#Segoe Fluent Icons";
         private const string ErrorGlyph = "\ue783";
 
         private SettingsUserControl SettingWindow;
@@ -130,7 +128,6 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
 
                         return true;
                     },
-                    IcoPath = imagePath,
                     Glyph = new GlyphInfo(FontFamily, deviceInfo.glyph)
                 };
 
@@ -148,7 +145,6 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector
                 {
                     Title = title,
                     SubTitle = subtitle,
-                    IcoPath = imagePath,
                     Glyph = new GlyphInfo(FontFamily, ErrorGlyph),
                     Action = _ =>
                     {

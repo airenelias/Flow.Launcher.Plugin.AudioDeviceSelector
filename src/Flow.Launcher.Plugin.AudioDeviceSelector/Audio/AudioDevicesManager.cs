@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Flow.Launcher.Plugin.AudioDeviceSelector.Components;
 using NAudio.CoreAudioApi.Interfaces;
 using PropertyKeys = NAudio.CoreAudioApi.PropertyKeys;
+using NAudio.Mixer;
 
 namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
 {
@@ -136,6 +137,51 @@ namespace Flow.Launcher.Plugin.AudioDeviceSelector.Audio
             }
 
             return friendyName;
+        }
+
+        public static MixerLineComponentType GetDeviceType(string friendlyName)
+        {
+            foreach (Mixer mixer in Mixer.Mixers)
+            {
+                // mixer.Name length is limited by MAXPNAMELEN=32 cuz windows stuff, thats why it's not Equals comparison
+                if (friendlyName.StartsWith(mixer.Name) && mixer.DestinationCount > 0)
+                {
+                    return mixer.GetDestination(0).ComponentType;
+                }
+            }
+
+            return MixerLineComponentType.DestinationUndefined;
+        }
+
+        public static string GetDeviceTypeUnicode(string friendlyName)
+        {
+            switch (GetDeviceType(friendlyName))
+            {
+                case MixerLineComponentType.DestinationDigital:
+                case MixerLineComponentType.DestinationLine:
+                case MixerLineComponentType.DestinationWaveIn:
+                    return "e95f"; // Wire glyph
+                case MixerLineComponentType.DestinationMonitor:
+                    return "e7f4"; // TVMonitor glyph
+                case MixerLineComponentType.DestinationSpeakers:
+                    return "e7f5"; // Speakers glyph
+                case MixerLineComponentType.DestinationHeadphones:
+                    return "e7f6"; // Headphone glyph
+                case MixerLineComponentType.DestinationTelephone:
+                    return "e717"; // Phone glyph
+                case MixerLineComponentType.DestinationVoiceIn:
+                    return "efa9"; // Speech glyph
+                case MixerLineComponentType.DestinationUndefined:
+                    return "e783"; // Error glyph
+                default:
+                    return "e767"; // Volume glyph
+            }
+        }
+
+        public static char GetDeviceTypeGlyph(string friendlyName)
+        {
+            int codePoint = int.Parse(GetDeviceTypeUnicode(friendlyName), System.Globalization.NumberStyles.HexNumber);
+            return (char)codePoint;
         }
 
         public void OnDeviceStateChanged(string deviceId, DeviceState newState) { }

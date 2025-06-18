@@ -3,10 +3,10 @@
   "ActionKeyword": "ad",
   "Name": "Audio Device Selector",
   "Description": "Easy change your playback device",
-  "Author": "AttilaKapostyak",
-  "Version": "1.0.3",
+  "Author": "AttilaKapostyak, Yusyuriv, airenelias",
+  "Version": "1.1.0",
   "Language": "csharp",
-  "Website": "https://github.com/attilakapostyak/Flow.Launcher.Plugin.AudioDeviceSelector",
+  "Website": "https://github.com/airenelias/Flow.Launcher.Plugin.AudioDeviceSelector",
   "ExecuteFileName": "Flow.Launcher.Plugin.AudioDeviceSelector.dll",
   "IcoPath": "Images\\speaker.png"
 }
